@@ -1,4 +1,4 @@
-#BloodBank
+# BloodBank 🩸💉
 ---
 
 ### 🎯 Mini Mundo – Sistema de Gerenciamento de Banco de Sangue
