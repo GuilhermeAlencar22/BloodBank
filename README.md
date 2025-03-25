@@ -50,5 +50,11 @@ O sistema visa:
 - Facilita o atendimento humanizado aos pacientes ao manter um banco de dados completo.
 
 ---
+# Diagrama Lógico
+![image](https://github.com/user-attachments/assets/2147e24a-4eec-4260-bcf0-26d1412b859d)
 
-Se desejar, posso também gerar um `README.md` formatado com Markdown para o repositório GitHub, incluindo tópicos como instalação, tecnologias utilizadas ou instruções de uso. Deseja isso também?
+---
+# Diagrama Conceitual
+![image](https://github.com/user-attachments/assets/857b7f38-90d5-434a-8ba6-dfb3e0f8458d)
+
+
