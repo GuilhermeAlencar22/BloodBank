@@ -61,8 +61,7 @@ O sistema visa:
 ![image](https://github.com/user-attachments/assets/8bd8bf08-6ad3-42b8-a20d-141bfc7cdf11)
 
 ---
-# Protótipo de Baixa Fidelidade (FIGMA)
-![image](https://github.com/user-attachments/assets/5aa4b597-96df-4b78-be10-bebb055d7bdc)
+
 
 
 
