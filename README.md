@@ -51,12 +51,14 @@ O sistema visa:
 
 ---
 # Diagrama Lógico
-![image](https://github.com/user-attachments/assets/555c7d0c-2738-460a-9389-b04f38f63965)
+![image](https://github.com/user-attachments/assets/4fd09c5f-4ef9-4380-9536-221c9fe005be)
+
 
 
 
 ---
 # Diagrama Conceitual
-![image](https://github.com/user-attachments/assets/7c9da667-f78b-467a-81b3-4df140244897)
+![image](https://github.com/user-attachments/assets/8bd8bf08-6ad3-42b8-a20d-141bfc7cdf11)
+
 
 
