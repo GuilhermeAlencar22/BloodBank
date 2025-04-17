@@ -101,7 +101,8 @@ Ideal para instituições de saúde que necessitam **rastreabilidade total** do 
 ---
 
 # Diagrama Lógico
-![image](https://github.com/user-attachments/assets/4fd09c5f-4ef9-4380-9536-221c9fe005be)
+![image](https://github.com/user-attachments/assets/2cbdefd5-f832-400f-93c1-9410d933a0de)
+
 
 
 
