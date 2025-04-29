@@ -1,12 +1,13 @@
-// src/pages/estoque/EstoqueForm.js
-
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function EstoqueForm() {
   const [form, setForm] = useState({
     tipoSanguineo: "",
     qtdBolsas: ""
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -16,7 +17,6 @@ function EstoqueForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Monta o payload conforme o que o back-end espera:
     const payload = {
       tipoSanguineo: form.tipoSanguineo,
       qtdBolsas: parseInt(form.qtdBolsas, 10)
@@ -33,41 +33,139 @@ function EstoqueForm() {
         throw new Error(data.error || "Erro ao adicionar ao estoque");
       }
       alert(data.message || "Estoque atualizado com sucesso!");
-      // Limpar formulário
       setForm({ tipoSanguineo: "", qtdBolsas: "" });
     } catch (err) {
       alert("Erro ao adicionar ao estoque: " + err.message);
     }
   };
 
+  const handleVoltar = () => {
+    navigate('/sistema');
+  };
+
   return (
-    <div>
-      <h2>Adicionar/Atualizar Estoque</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Tipo Sanguíneo:</label>
-          <input
-            type="text"
-            name="tipoSanguineo"
-            value={form.tipoSanguineo}
-            onChange={handleChange}
-            required
-          />
+    <div style={pageStyle}>
+      <div style={headerStyle}>
+        <h2>📦 Atualizar Estoque de Bolsas</h2>
+      </div>
+
+      <form onSubmit={handleSubmit} style={formStyle}>
+        <div style={formRow}>
+          <div style={formGroup}>
+            <label>Tipo Sanguíneo:</label>
+            <input
+              type="text"
+              name="tipoSanguineo"
+              value={form.tipoSanguineo}
+              onChange={handleChange}
+              required
+              style={inputStyle}
+            />
+          </div>
+
+          <div style={formGroup}>
+            <label>Quantidade de Bolsas:</label>
+            <input
+              type="number"
+              name="qtdBolsas"
+              value={form.qtdBolsas}
+              onChange={handleChange}
+              required
+              style={inputStyle}
+            />
+          </div>
         </div>
-        <div>
-          <label>Quantidade de Bolsas:</label>
-          <input
-            type="number"
-            name="qtdBolsas"
-            value={form.qtdBolsas}
-            onChange={handleChange}
-            required
-          />
+
+        <div style={buttonWrapper}>
+          <button type="submit" style={submitButton}>
+            Salvar
+          </button>
+          <button
+            type="button"
+            onClick={handleVoltar}
+            style={backButton}
+            onMouseOver={e => e.currentTarget.style.backgroundColor = "#2c3e50"}
+            onMouseOut={e => e.currentTarget.style.backgroundColor = "#34495e"}
+          >
+            Voltar
+          </button>
         </div>
-        <button type="submit">Salvar</button>
       </form>
     </div>
   );
 }
+
+// 🎨 Estilos:
+
+const pageStyle = {
+  maxWidth: "900px",
+  margin: "40px auto",
+  padding: "20px",
+  backgroundColor: "#fff",
+  borderRadius: "12px",
+  boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+  fontFamily: "'Segoe UI', sans-serif"
+};
+
+const headerStyle = {
+  textAlign: "center",
+  marginBottom: "30px"
+};
+
+const formStyle = {
+  padding: "20px"
+};
+
+const formRow = {
+  display: "flex",
+  gap: "20px",
+  marginBottom: "20px",
+  flexWrap: "wrap"
+};
+
+const formGroup = {
+  flex: "1",
+  display: "flex",
+  flexDirection: "column"
+};
+
+const inputStyle = {
+  padding: "10px",
+  border: "1px solid #ccc",
+  borderRadius: "6px",
+  fontSize: "15px",
+  marginTop: "6px"
+};
+
+const buttonWrapper = {
+  display: "flex",
+  justifyContent: "flex-end",
+  gap: "10px",
+  marginTop: "30px"
+};
+
+const submitButton = {
+  padding: "12px 30px",
+  backgroundColor: "#7B1E1E",
+  color: "white",
+  border: "none",
+  borderRadius: "8px",
+  fontWeight: "bold",
+  fontSize: "16px",
+  cursor: "pointer",
+  transition: "background-color 0.3s ease"
+};
+
+const backButton = {
+  padding: "12px 30px",
+  backgroundColor: "#34495e",
+  color: "white",
+  border: "none",
+  borderRadius: "8px",
+  fontWeight: "bold",
+  fontSize: "16px",
+  cursor: "pointer",
+  transition: "background-color 0.3s ease"
+};
 
 export default EstoqueForm;

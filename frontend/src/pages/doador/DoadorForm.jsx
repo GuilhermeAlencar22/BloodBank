@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./DoadorForm.css";
 
 function DoadorForm() {
   const [form, setForm] = useState({
@@ -63,32 +64,62 @@ function DoadorForm() {
   };
 
   return (
-    <div>
-      <h2>Novo Doador</h2>
-      <form onSubmit={handleSubmit}>
-        {[
-          ["cpf", "CPF"],
-          ["nome", "Nome"],
-          ["idade", "Idade"],
-          ["sexo", "Sexo (M/F)"],
-          ["tipoSanguineo", "Tipo Sanguíneo"],
-          ["enderecoRua", "Rua"],
-          ["enderecoCep", "CEP"],
-          ["enderecoCidade", "Cidade"],
-          ["enderecoEstado", "Estado"]
-        ].map(([fieldName, label]) => (
-          <div key={fieldName}>
-            <label>{label}:</label>
-            <input
-              name={fieldName}
-              value={form[fieldName]}
-              onChange={handleChange}
-              required
-            />
+    <div className="register-section">
+      <div className="register-header">
+        <h2>Registro de Doador</h2>
+      </div>
+      <form onSubmit={handleSubmit} className="register-form">
+        <div className="form-row">
+          <div className="form-group">
+            <label>Nome:</label>
+            <input name="nome" value={form.nome} onChange={handleChange} required />
           </div>
-        ))}
+          <div className="form-group">
+            <label>CPF:</label>
+            <input name="cpf" value={form.cpf} onChange={handleChange} required />
+          </div>
+        </div>
 
-        <button type="submit">Cadastrar</button>
+        <div className="form-row">
+          <div className="form-group">
+            <label>Idade:</label>
+            <input name="idade" value={form.idade} onChange={handleChange} required />
+          </div>
+          <div className="form-group">
+            <label>Sexo (M/F):</label>
+            <input name="sexo" value={form.sexo} onChange={handleChange} required />
+          </div>
+        </div>
+
+        <div className="form-row">
+          <div className="form-group">
+            <label>Tipo Sanguíneo:</label>
+            <input name="tipoSanguineo" value={form.tipoSanguineo} onChange={handleChange} required />
+          </div>
+          <div className="form-group">
+            <label>CEP:</label>
+            <input name="enderecoCep" value={form.enderecoCep} onChange={handleChange} required />
+          </div>
+        </div>
+
+        <div className="form-row">
+          <div className="form-group">
+            <label>Rua:</label>
+            <input name="enderecoRua" value={form.enderecoRua} onChange={handleChange} required />
+          </div>
+          <div className="form-group">
+            <label>Cidade:</label>
+            <input name="enderecoCidade" value={form.enderecoCidade} onChange={handleChange} required />
+          </div>
+          <div className="form-group">
+            <label>Estado:</label>
+            <input name="enderecoEstado" value={form.enderecoEstado} onChange={handleChange} required />
+          </div>
+        </div>
+
+        <div className="form-footer">
+          <button type="submit" className="submit-button">Cadastrar</button>
+        </div>
       </form>
     </div>
   );
