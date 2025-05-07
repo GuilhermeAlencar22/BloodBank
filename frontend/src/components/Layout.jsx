@@ -27,9 +27,11 @@ function Layout({ children }) {
   return (
     <>
       <header className="navbar">
-        <div className="logo">
-          🩸 <span>Banco de Sangue</span>
-        </div>
+      <div className="logo">
+        <img src="/logo.png" alt="Logo" className="logo-img" />
+        <span>Blood Bank</span>
+      </div>
+
         <nav className="menu">
           <Link to="/">Início</Link>
           <Link to="/sobre">Sobre Nós</Link>
