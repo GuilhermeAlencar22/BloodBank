@@ -99,8 +99,30 @@ Ideal para instituições de saúde que necessitam **rastreabilidade total** do 
 - **Gson (JSON Serializer/Deserializer)**
 
 ---
+## 🚀 Instruções de Execução
+
+```bash
+# Clone o repositório
+git clone https://github.com/GuilhermeAlencar22/BloodBank.git
+cd BloodBank
+
+# Compile e inicie o back-end
+mvn clean package    
+mvn jetty:run
+
+
+# Acesse o front-end
+cd frontend
+npm install
+npm start
+
+# Acesse em http://localhost:3000
+```
+
+---
 
 # Diagrama Lógico
+
 ![image](https://github.com/user-attachments/assets/2cbdefd5-f832-400f-93c1-9410d933a0de)
 
 
@@ -109,6 +131,7 @@ Ideal para instituições de saúde que necessitam **rastreabilidade total** do 
 
 ---
 # Diagrama Conceitual
+
 ![image](https://github.com/user-attachments/assets/8bd8bf08-6ad3-42b8-a20d-141bfc7cdf11)
 
 ---
