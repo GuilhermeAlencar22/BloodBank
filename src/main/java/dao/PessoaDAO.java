@@ -10,6 +10,25 @@ import java.util.List;
 import domain.Pessoa;
 
 public class PessoaDAO {
+    public void atualizar(Pessoa p) {
+    String sql = "UPDATE Pessoa SET nome=?, endereco_cidade=?, endereco_estado=?, endereco_rua=?, endereco_cep=?, idade=?, tipo_sanguineo=? WHERE cpf=?";
+    try (Connection conn = ConnectionFactory.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setString(1, p.getNome());
+        ps.setString(2, p.getEnderecoCidade());
+        ps.setString(3, p.getEnderecoEstado());
+        ps.setString(4, p.getEnderecoRua());
+        ps.setString(5, p.getEnderecoCep());
+        ps.setInt(6, p.getIdade());
+        ps.setString(7, p.getTipoSanguineo());
+        ps.setString(8, p.getCpf());
+
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        throw new RuntimeException("Erro ao atualizar pessoa: " + e.getMessage(), e);
+    }
+}
 
     public void inserir(Pessoa p) {
         String sql = "INSERT INTO Pessoa (cpf, nome, endereco_cidade, endereco_estado, endereco_rua, endereco_cep, idade, tipo_sanguineo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -94,7 +113,7 @@ public class PessoaDAO {
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao listar pessoas: " + e.getMessage(), e);
         }
-
+        
         return lista;
     }
 }

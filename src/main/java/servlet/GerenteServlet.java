@@ -77,4 +77,32 @@ public class GerenteServlet extends HttpServlet {
             resp.getWriter().write("{\"message\":\"Gerente deletado\"}");
         }
     }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp)
+        throws ServletException, IOException {
+
+    resp.setContentType("application/json");
+    String pathInfo = req.getPathInfo();
+
+    if (pathInfo == null || pathInfo.equals("/")) {
+        resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        resp.getWriter().write("{\"error\":\"ID não informado\"}");
+        return;
+    }
+
+    String id = pathInfo.substring(1);
+    Gerente existente = dao.buscarPorId(id);
+    if (existente == null) {
+        resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        resp.getWriter().write("{\"error\":\"Gerente não encontrado\"}");
+        return;
+    }
+
+    Gerente atualizado = gson.fromJson(req.getReader(), Gerente.class);
+    dao.atualizar(atualizado);
+
+    resp.getWriter().write("{\"message\":\"Gerente atualizado com sucesso\"}");
+}
+
 }

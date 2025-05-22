@@ -6,6 +6,10 @@ function EstoqueList() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    fetchEstoque();
+  }, []);
+
+  const fetchEstoque = () => {
     fetch("http://localhost:8080/estoque")
       .then((res) => {
         if (!res.ok) throw new Error("Falha ao buscar o estoque");
@@ -13,7 +17,25 @@ function EstoqueList() {
       })
       .then(setEstoque)
       .catch((error) => console.error("Erro ao listar estoque:", error));
-  }, []);
+  };
+
+  const handleEdit = (id) => {
+    navigate(`/estoques/editar/${id}`);
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm("Deseja realmente excluir este registro de estoque?")) {
+      fetch(`http://localhost:8080/estoque?id=${id}`, {
+        method: "DELETE"
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error("Erro ao excluir");
+          alert("Estoque excluído com sucesso!");
+          fetchEstoque();
+        })
+        .catch((err) => alert(err.message));
+    }
+  };
 
   const handleVoltar = () => {
     navigate('/sistema');
@@ -31,6 +53,7 @@ function EstoqueList() {
             <tr>
               <th style={thStyle}>Tipo Sanguíneo</th>
               <th style={thStyle}>Quantidade de Bolsas</th>
+              <th style={thStyle}>Ações</th>
             </tr>
           </thead>
           <tbody>
@@ -38,6 +61,24 @@ function EstoqueList() {
               <tr key={item.idEstoque}>
                 <td style={tdStyle}>{item.tipoSanguineo}</td>
                 <td style={tdStyle}>{item.qtdBolsas}</td>
+                <td style={tdStyle}>
+                  <button
+                    onClick={() => handleEdit(item.idEstoque)}
+                    style={editButtonStyle}
+                    onMouseOver={e => e.currentTarget.style.backgroundColor = "#1e8449"}
+                    onMouseOut={e => e.currentTarget.style.backgroundColor = "#27ae60"}
+                  >
+                    Editar
+                  </button>
+                  <button
+                    onClick={() => handleDelete(item.idEstoque)}
+                    style={deleteButtonStyle}
+                    onMouseOver={e => e.currentTarget.style.backgroundColor = "#c0392b"}
+                    onMouseOut={e => e.currentTarget.style.backgroundColor = "#e74c3c"}
+                  >
+                    Excluir
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -100,6 +141,31 @@ const tdStyle = {
   borderBottom: "1px solid #eee",
   fontSize: "14px",
   color: "#333"
+};
+
+const editButtonStyle = {
+  backgroundColor: "#27ae60",
+  color: "white",
+  border: "none",
+  padding: "6px 12px",
+  borderRadius: "6px",
+  fontSize: "14px",
+  fontWeight: "bold",
+  cursor: "pointer",
+  marginRight: "8px",
+  transition: "background-color 0.3s ease"
+};
+
+const deleteButtonStyle = {
+  backgroundColor: "#e74c3c",
+  color: "white",
+  border: "none",
+  padding: "6px 12px",
+  borderRadius: "6px",
+  fontSize: "14px",
+  fontWeight: "bold",
+  cursor: "pointer",
+  transition: "background-color 0.3s ease"
 };
 
 const buttonWrapper = {

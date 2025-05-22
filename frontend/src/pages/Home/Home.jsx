@@ -13,7 +13,9 @@ function Home() {
             doando <span className="highlight">sangue</span>
           </h1>
           <p>Um sistema completo para gestão de doadores, hospitais e solicitações de sangue.</p>
-          <Link to="/cadastro" className="cta-button">Solicite sangue</Link>
+          <Link to="/doadores/novo" state={{ from: "home" }} className="cta-button">
+            Salve agora uma vida
+          </Link>
         </div>
       </section>
 
@@ -61,7 +63,9 @@ function Home() {
       {/* CTA FINAL */}
       <section className="final-cta section">
         <h2 className="section-title">Você pode fazer a diferença hoje</h2>
-        <Link to="/cadastro" className="cta-button">Torne-se um doador</Link>
+        <Link to="/doadores/novo" state={{ from: "home" }} className="cta-button">
+          Torne-se um doador
+        </Link>
       </section>
     </div>
   );

@@ -19,7 +19,7 @@ function GerenteList() {
   const handleDelete = (idFuncionario) => {
     if (window.confirm("Tem certeza que deseja excluir este gerente?")) {
       fetch(`http://localhost:8080/gerentes/${idFuncionario}`, {
-        method: "DELETE",
+        method: "DELETE"
       })
         .then((res) => {
           if (!res.ok) throw new Error("Erro ao excluir gerente");
@@ -28,6 +28,10 @@ function GerenteList() {
         })
         .catch((err) => alert(err.message));
     }
+  };
+
+  const handleEditar = (idFuncionario) => {
+    navigate(`/gerentes/editar/${idFuncionario}`);
   };
 
   const handleVoltar = () => {
@@ -55,6 +59,14 @@ function GerenteList() {
                 <td style={tdStyle}>{g.idFuncionario}</td>
                 <td style={tdStyle}>{g.cnpjHospital}</td>
                 <td style={tdStyle}>
+                  <button
+                    onClick={() => handleEditar(g.idFuncionario)}
+                    style={editButtonStyle}
+                    onMouseOver={e => e.currentTarget.style.backgroundColor = "#1e8449"}
+                    onMouseOut={e => e.currentTarget.style.backgroundColor = "#27ae60"}
+                  >
+                    Editar
+                  </button>
                   <button
                     onClick={() => handleDelete(g.idFuncionario)}
                     style={deleteButtonStyle}
@@ -84,7 +96,7 @@ function GerenteList() {
   );
 }
 
-// 🎨 Estilos organizados:
+// 🎨 Estilos:
 
 const pageStyle = {
   maxWidth: "1000px",
@@ -125,6 +137,19 @@ const tdStyle = {
   padding: "10px",
   fontSize: "14px",
   color: "#333"
+};
+
+const editButtonStyle = {
+  backgroundColor: "#27ae60",
+  color: "white",
+  border: "none",
+  padding: "6px 12px",
+  borderRadius: "6px",
+  fontSize: "14px",
+  fontWeight: "bold",
+  cursor: "pointer",
+  marginRight: "6px",
+  transition: "background-color 0.3s ease"
 };
 
 const deleteButtonStyle = {

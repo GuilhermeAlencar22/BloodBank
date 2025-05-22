@@ -92,32 +92,28 @@ public class DoadorServlet extends HttpServlet {
         }
     }
 
-    // 🔥 ADICIONADO AQUI
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
         resp.setContentType("application/json");
 
-        String cpf = req.getParameter("cpf");
-        String qtdStr = req.getParameter("qtdBolsas");
+        Doador doadorAtualizado = gson.fromJson(req.getReader(), Doador.class);
+        String cpf = doadorAtualizado.getCpf();
 
-        if (cpf == null || qtdStr == null) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write("{\"error\":\"CPF e quantidade obrigatórios.\"}");
+        Doador existente = doadorDAO.buscarPorCpf(cpf);
+        if (existente == null) {
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            resp.getWriter().write("{\"error\":\"Doador não encontrado\"}");
             return;
         }
 
-        int qtd;
-        try {
-            qtd = Integer.parseInt(qtdStr);
-        } catch (NumberFormatException e) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write("{\"error\":\"Quantidade inválida.\"}");
-            return;
-        }
+        // Atualiza os dados na tabela Pessoa
+        pessoaDAO.atualizar(doadorAtualizado.getPessoa());
 
-        doadorDAO.atualizarQtdBolsas(cpf, qtd);
-        resp.getWriter().write("{\"message\": \"Quantidade de bolsas atualizada com sucesso!\"}");
+        // Atualiza os dados na tabela Doador
+        doadorDAO.atualizar(doadorAtualizado);
+
+        resp.getWriter().write("{\"message\":\"Doador atualizado com sucesso\"}");
     }
 }

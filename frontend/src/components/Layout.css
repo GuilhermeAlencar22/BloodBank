@@ -20,7 +20,7 @@
 }
 
 .logo-img {
-  height: 140px;
+  height: 120px;
   width: auto;
   margin-right: 10px;
 }
@@ -46,18 +46,19 @@
 
 .login-button {
   padding: 10px 26px;
-  border: 1px solid #000;
+  border: 2px solid #7B1E1E;
   border-radius: 6px;
-  background-color: #000;
-  color: #fff;
+  background-color: transparent;
+  color: #7B1E1E;
   font-weight: 600;
   font-size: 15px;
+  cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .login-button:hover {
-  background-color: #333;
-  transform: scale(1.04);
+  background-color: #fceeee;
+  transform: scale(1.05);
 }
 
 .avatar-wrapper {

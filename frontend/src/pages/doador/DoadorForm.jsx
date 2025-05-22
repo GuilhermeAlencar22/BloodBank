@@ -1,7 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import "./DoadorForm.css";
 
-function DoadorForm() {
+export default function DoadorForm() {
+  const { cpf } = useParams();
+  const isEdit = Boolean(cpf);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from || null;
+
   const [form, setForm] = useState({
     cpf: "",
     nome: "",
@@ -11,82 +19,137 @@ function DoadorForm() {
     enderecoRua: "",
     enderecoCep: "",
     enderecoCidade: "",
-    enderecoEstado: ""
+    enderecoEstado: "",
   });
 
-  const handleChange = (e) => {
+  const [loading, setLoading] = useState(isEdit);
+
+  useEffect(() => {
+    if (isEdit) {
+      fetch(`http://localhost:8080/doadores/${cpf}`)
+        .then(res => {
+          if (!res.ok) throw new Error("GET falhou");
+          return res.json();
+        })
+        .then(data => {
+          setForm({
+            cpf: data.pessoa.cpf || "",
+            nome: data.pessoa.nome || "",
+            idade: data.pessoa.idade?.toString() || "",
+            sexo: data.sexo || "",
+            tipoSanguineo: data.pessoa.tipoSanguineo || "",
+            enderecoRua: data.pessoa.enderecoRua || "",
+            enderecoCep: data.pessoa.enderecoCep || "",
+            enderecoCidade: data.pessoa.enderecoCidade || "",
+            enderecoEstado: data.pessoa.enderecoEstado || "",
+          });
+        })
+        .catch(err => {
+          console.error("[DoadorForm] Erro ao buscar:", err);
+          alert("Falha ao carregar dados do doador.");
+        })
+        .finally(() => setLoading(false));
+    }
+  }, [isEdit, cpf]);
+
+  const handleChange = e => {
     const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
+    setForm(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
 
-    const doador = {
+    const doadorPayload = {
       pessoa: {
         cpf: form.cpf,
         nome: form.nome,
         idade: parseInt(form.idade, 10),
-        sexo: form.sexo,
         tipoSanguineo: form.tipoSanguineo,
         enderecoRua: form.enderecoRua,
-        enderecoCep: form.enderecoCep,
         enderecoCidade: form.enderecoCidade,
-        enderecoEstado: form.enderecoEstado
+        enderecoEstado: form.enderecoEstado,
+        enderecoCep: form.enderecoCep
       },
       sexo: form.sexo
     };
 
-    fetch("http://localhost:8080/doadores", {
-      method: "POST",
+    const url = "http://localhost:8080/doadores";
+    const method = isEdit ? "PUT" : "POST";
+
+    fetch(url, {
+      method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(doador)
+      body: JSON.stringify(doadorPayload),
     })
-      .then(async (res) => {
+      .then(async res => {
         const data = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(data.error || "Erro ao cadastrar doador");
-        alert(data.message || "Doador cadastrado com sucesso!");
-        setForm({
-          cpf: "",
-          nome: "",
-          idade: "",
-          sexo: "",
-          tipoSanguineo: "",
-          enderecoRua: "",
-          enderecoCep: "",
-          enderecoCidade: "",
-          enderecoEstado: ""
-        });
+        if (!res.ok) throw new Error(data.error || "Erro ao salvar");
+        alert(
+          data.message ||
+            (isEdit
+              ? "Doador atualizado com sucesso!"
+              : "Doador cadastrado com sucesso!")
+        );
+        navigate("/doadores");
       })
-      .catch((err) => {
-        alert("Erro ao cadastrar doador: " + err.message);
+      .catch(err => {
+        console.error("[DoadorForm] Erro ao salvar:", err);
+        alert("Erro ao salvar: " + err.message);
       });
   };
+
+  const handleVoltar = () => {
+    if (from === "home") {
+      navigate("/");
+    } else if (from === "sistema") {
+      navigate("/sistema");
+    } else {
+      navigate("/doadores");
+    }
+  };
+
+  if (loading) {
+    return <div style={{ padding: 20 }}>Carregando dados do doador...</div>;
+  }
 
   return (
     <div className="register-section">
       <div className="register-header">
-        <h2>Registro de Doador</h2>
+        <h2>{isEdit ? "✏️ Editar Doador" : "Novo Doador"}</h2>
       </div>
+
       <form onSubmit={handleSubmit} className="register-form">
+        <div className="form-row">
+          <div className="form-group">
+            <label>CPF:</label>
+            <input
+              name="cpf"
+              value={form.cpf}
+              onChange={handleChange}
+              required
+              disabled={isEdit}
+            />
+          </div>
+        </div>
+
         <div className="form-row">
           <div className="form-group">
             <label>Nome:</label>
             <input name="nome" value={form.nome} onChange={handleChange} required />
           </div>
           <div className="form-group">
-            <label>CPF:</label>
-            <input name="cpf" value={form.cpf} onChange={handleChange} required />
-          </div>
-        </div>
-
-        <div className="form-row">
-          <div className="form-group">
             <label>Idade:</label>
-            <input name="idade" value={form.idade} onChange={handleChange} required />
+            <input
+              type="number"
+              name="idade"
+              value={form.idade}
+              onChange={handleChange}
+              required
+            />
           </div>
           <div className="form-group">
-            <label>Sexo (M/F):</label>
+            <label>Sexo:</label>
             <input name="sexo" value={form.sexo} onChange={handleChange} required />
           </div>
         </div>
@@ -94,35 +157,73 @@ function DoadorForm() {
         <div className="form-row">
           <div className="form-group">
             <label>Tipo Sanguíneo:</label>
-            <input name="tipoSanguineo" value={form.tipoSanguineo} onChange={handleChange} required />
-          </div>
-          <div className="form-group">
-            <label>CEP:</label>
-            <input name="enderecoCep" value={form.enderecoCep} onChange={handleChange} required />
+            <input
+              name="tipoSanguineo"
+              value={form.tipoSanguineo}
+              onChange={handleChange}
+              required
+            />
           </div>
         </div>
 
         <div className="form-row">
           <div className="form-group">
+            <label>CEP:</label>
+            <input
+              name="enderecoCep"
+              value={form.enderecoCep}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
             <label>Rua:</label>
-            <input name="enderecoRua" value={form.enderecoRua} onChange={handleChange} required />
+            <input
+              name="enderecoRua"
+              value={form.enderecoRua}
+              onChange={handleChange}
+              required
+            />
           </div>
           <div className="form-group">
             <label>Cidade:</label>
-            <input name="enderecoCidade" value={form.enderecoCidade} onChange={handleChange} required />
+            <input
+              name="enderecoCidade"
+              value={form.enderecoCidade}
+              onChange={handleChange}
+              required
+            />
           </div>
           <div className="form-group">
             <label>Estado:</label>
-            <input name="enderecoEstado" value={form.enderecoEstado} onChange={handleChange} required />
+            <input
+              name="enderecoEstado"
+              value={form.enderecoEstado}
+              onChange={handleChange}
+              required
+            />
           </div>
         </div>
 
         <div className="form-footer">
-          <button type="submit" className="submit-button">Cadastrar</button>
+          <button type="submit" className="submit-button">
+            {isEdit ? "Salvar Alterações" : "Cadastrar"}
+          </button>
+
+          {/* Só mostra o botão de voltar se souber de onde veio */}
+          {(from === "home" || from === "sistema") && (
+            <button
+              type="button"
+              onClick={handleVoltar}
+              className="back-button"
+              onMouseOver={e => (e.currentTarget.style.backgroundColor = "#21618c")}
+              onMouseOut={e => (e.currentTarget.style.backgroundColor = "#2980b9")}
+            >
+              Voltar
+            </button>
+          )}
         </div>
       </form>
     </div>
   );
 }
-
-export default DoadorForm;

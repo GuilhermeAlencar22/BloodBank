@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function GerenteForm() {
+  const { id } = useParams(); // usado para edição
+  const isEdit = Boolean(id);
+  const navigate = useNavigate();
+
   const [idFuncionario, setIdFuncionario] = useState("");
   const [nome, setNome] = useState("");
   const [cnpjHospital, setCnpjHospital] = useState("");
   const [hospitais, setHospitais] = useState([]);
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(isEdit);
 
   useEffect(() => {
     fetch("http://localhost:8080/hospitais")
@@ -15,50 +19,83 @@ function GerenteForm() {
       .catch((err) => console.error("Erro ao buscar hospitais", err));
   }, []);
 
+  useEffect(() => {
+    if (isEdit) {
+      fetch(`http://localhost:8080/gerentes/${id}`)
+        .then(res => {
+          if (!res.ok) throw new Error("Erro ao buscar gerente");
+          return res.json();
+        })
+        .then(data => {
+          setIdFuncionario(data.idFuncionario);
+          setCnpjHospital(data.cnpjHospital);
+        })
+        .catch(err => {
+          console.error(err);
+          alert("Erro ao carregar gerente.");
+        })
+        .finally(() => setLoading(false));
+    }
+  }, [isEdit, id]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const funcionario = {
-      idFuncionario,
-      nome,
-    };
 
     const gerente = {
       idFuncionario,
       cnpjHospital,
     };
 
-    fetch("http://localhost:8080/funcionarios", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(funcionario),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Erro ao cadastrar funcionário");
-        return fetch("http://localhost:8080/gerentes", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(gerente),
-        });
+    const url = isEdit
+      ? `http://localhost:8080/gerentes/${idFuncionario}`
+      : "http://localhost:8080/gerentes";
+    const method = isEdit ? "PUT" : "POST";
+
+    const salvarGerente = () => {
+      fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(gerente),
       })
-      .then((res) => {
-        if (!res.ok) throw new Error("Erro ao cadastrar gerente");
-        alert("Gerente cadastrado com sucesso!");
-        setIdFuncionario("");
-        setNome("");
-        setCnpjHospital("");
+        .then((res) => {
+          if (!res.ok) throw new Error("Erro ao salvar gerente");
+          return res.json();
+        })
+        .then((data) => {
+          alert(data.message || "Gerente salvo com sucesso!");
+          navigate("/gerentes");
+        })
+        .catch((err) => alert(err.message));
+    };
+
+    if (isEdit) {
+      salvarGerente();
+    } else {
+      // Criação: primeiro cria funcionário
+      const funcionario = { idFuncionario, nome };
+      fetch("http://localhost:8080/funcionarios", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(funcionario),
       })
-      .catch((err) => alert(err.message));
+        .then((res) => {
+          if (!res.ok) throw new Error("Erro ao cadastrar funcionário");
+          salvarGerente();
+        })
+        .catch((err) => alert(err.message));
+    }
   };
 
   const handleVoltar = () => {
-    navigate('/sistema');
+    navigate("/sistema");
   };
+
+  if (loading) return <div style={{ padding: 20 }}>Carregando dados do gerente...</div>;
 
   return (
     <div style={pageStyle}>
       <div style={headerStyle}>
-        <h2>🧑‍💼 Cadastrar Gerente</h2>
+        <h2>{isEdit ? "✏️ Editar Gerente" : "🧑‍💼 Cadastrar Gerente"}</h2>
       </div>
 
       <form onSubmit={handleSubmit} style={formStyle}>
@@ -69,19 +106,22 @@ function GerenteForm() {
               value={idFuncionario}
               onChange={(e) => setIdFuncionario(e.target.value)}
               required
+              disabled={isEdit}
               style={inputStyle}
             />
           </div>
 
-          <div style={formGroup}>
-            <label>Nome:</label>
-            <input
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
-              required
-              style={inputStyle}
-            />
-          </div>
+          {!isEdit && (
+            <div style={formGroup}>
+              <label>Nome:</label>
+              <input
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+                required
+                style={inputStyle}
+              />
+            </div>
+          )}
         </div>
 
         <div style={formRow}>
@@ -105,7 +145,7 @@ function GerenteForm() {
 
         <div style={buttonWrapper}>
           <button type="submit" style={submitButton}>
-            Salvar
+            {isEdit ? "Salvar Alterações" : "Cadastrar"}
           </button>
           <button
             type="button"
@@ -139,9 +179,7 @@ const headerStyle = {
   marginBottom: "30px"
 };
 
-const formStyle = {
-  padding: "20px",
-};
+const formStyle = { padding: "20px" };
 
 const formRow = {
   display: "flex",

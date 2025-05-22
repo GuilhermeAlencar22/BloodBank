@@ -46,6 +46,38 @@ public class SolicitacaoServlet extends HttpServlet {
     }
 
     @Override
+protected void doPut(HttpServletRequest req, HttpServletResponse resp)
+        throws ServletException, IOException {
+
+    resp.setContentType("application/json");
+    String pathInfo = req.getPathInfo();
+
+    if (pathInfo == null || pathInfo.equals("/")) {
+        resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        resp.getWriter().write("{\"error\":\"ID da solicitação não informado\"}");
+        return;
+    }
+
+    String id = pathInfo.substring(1);
+    Solicitacao existente = dao.buscarPorId(id);
+
+    if (existente == null) {
+        resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        resp.getWriter().write("{\"error\":\"Solicitação não encontrada\"}");
+        return;
+    }
+
+    Solicitacao atualizada = gson.fromJson(req.getReader(), Solicitacao.class);
+
+    // Não reprocessamos estoque aqui — apenas alteramos os dados da solicitação
+    dao.atualizar(atualizada);
+
+    resp.getWriter().write("{\"message\":\"Solicitação atualizada com sucesso\"}");
+}
+
+
+
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 

@@ -7,18 +7,13 @@ function Layout({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false);
+
 
   useEffect(() => {
-    const auth = sessionStorage.getItem('auth') === 'true'; // trocado para sessionStorage
+    const auth = sessionStorage.getItem('auth') === 'true';
     setIsAuthenticated(auth);
   }, [location]);
 
-  const handleLogout = () => {
-    sessionStorage.removeItem('auth'); // trocado para sessionStorage
-    setIsAuthenticated(false);
-    navigate('/');
-  };
 
   const handleProfileClick = () => {
     navigate('/sistema');
@@ -27,32 +22,24 @@ function Layout({ children }) {
   return (
     <>
       <header className="navbar">
-      <div className="logo">
-        <img src="/logo.png" alt="Logo" className="logo-img" />
-        <span>Blood Bank</span>
-      </div>
+        <div className="logo">
+          <img src="/logo.png" alt="Logo" className="logo-img" />
+          <span>Blood Bank</span>
+        </div>
 
         <nav className="menu">
           <Link to="/">Início</Link>
           <Link to="/sobre">Sobre Nós</Link>
-          <Link to="/cadastro">Se Cadastre</Link>
+          <Link to="/doadores/novo" state={{ from: "menu" }}>Se Cadastre</Link>
+          <Link to="/dashboard">Dashboards</Link>
 
           {isAuthenticated ? (
-            <div
-              className="avatar-wrapper"
-              onMouseEnter={() => setShowDropdown(true)}
-              onMouseLeave={() => setShowDropdown(false)}
-            >
+            <div className="avatar-wrapper">
               <div onClick={handleProfileClick} className="avatar-click">
                 <FaUserCircle size={28} color="#7B1E1E" />
               </div>
-              {showDropdown && (
-                <div className="dropdown-content">
-                  <button onClick={handleLogout}>Sair</button>
-                </div>
-              )}
             </div>
-          ) : (
+          ):(
             <Link to="/login" className="login-button">Login</Link>
           )}
         </nav>
@@ -61,5 +48,4 @@ function Layout({ children }) {
     </>
   );
 }
-
 export default Layout;

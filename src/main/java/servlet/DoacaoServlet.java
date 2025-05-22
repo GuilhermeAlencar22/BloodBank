@@ -1,6 +1,8 @@
 package servlet;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -10,6 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializer;
 
 import dao.BolsaSangueDAO;
 import dao.DoaDAO;
@@ -27,7 +32,12 @@ public class DoacaoServlet extends HttpServlet {
     private final PessoaDAO pessoaDAO = new PessoaDAO();
     private final BolsaSangueDAO bolsaDAO = new BolsaSangueDAO();
     private final EstoqueDAO estoqueDAO = new EstoqueDAO();
-    private final Gson gson = new Gson();
+
+    private final Gson gson = new GsonBuilder()
+        .registerTypeAdapter(LocalDateTime.class,
+            (JsonSerializer<LocalDateTime>) (src, typeOfSrc, context) ->
+                src == null ? null : new JsonPrimitive(src.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+        .create();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -88,7 +98,7 @@ public class DoacaoServlet extends HttpServlet {
             estoqueDAO.atualizar(estoque);
         }
 
-        // 🔥 Atualizar a quantidade de bolsas doadas pelo doador
+        // Atualiza a quantidade de bolsas doadas pelo doador
         doador.setQtdBolsasDoadas(doador.getQtdBolsasDoadas() + quantidade);
         pessoaDAO.atualizarQtdBolsasDoadas(doador.getCpf(), doador.getQtdBolsasDoadas());
 
@@ -102,6 +112,7 @@ public class DoacaoServlet extends HttpServlet {
 
         resp.setContentType("application/json");
         List<Doa> lista = doaDAO.listarTodas();
-        resp.getWriter().write(gson.toJson(lista));
+        String json = gson.toJson(lista);
+        resp.getWriter().write(json);
     }
 }

@@ -194,3 +194,27 @@ CREATE TABLE `Solicita` (
   CONSTRAINT `solicita_ibfk_1` FOREIGN KEY (`id_solicitacao`) REFERENCES `Solicitacao` (`id_solicitacao`),
   CONSTRAINT `solicita_ibfk_2` FOREIGN KEY (`id_funcionario`) REFERENCES `Funcionario` (`id_funcionario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Trigger 
+
+DELIMITER $$
+
+CREATE TRIGGER atualiza_estoque_apos_doacao
+AFTER INSERT ON Doa
+FOR EACH ROW
+BEGIN
+  DECLARE tipo_doado VARCHAR(3);
+
+  -- Obtém o tipo sanguíneo da bolsa doada
+  SELECT tipo_sanguineo INTO tipo_doado
+  FROM Bolsa_Sangue
+  WHERE id_bolsa = NEW.id_bolsa;
+
+  -- Atualiza o estoque correspondente
+  UPDATE Estoque
+  SET qtd_bolsas = qtd_bolsas + NEW.qtd_bolsas_doadas
+  WHERE tipo_sanguineo = tipo_doado;
+END$$
+
+DELIMITER ;
+

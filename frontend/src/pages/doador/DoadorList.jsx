@@ -17,24 +17,28 @@ function DoadorList() {
   };
 
   const handleVoltar = () => {
-    navigate('/sistema');
+    navigate("/sistema");
   };
 
   const handleExcluir = (cpf) => {
     if (window.confirm("Tem certeza que deseja excluir este doador?")) {
       fetch(`http://localhost:8080/doadores/${cpf}`, {
-        method: "DELETE"
+        method: "DELETE",
       })
         .then((res) => {
-          if (!res.ok) throw new Error('Erro ao excluir');
+          if (!res.ok) throw new Error("Erro ao excluir");
           alert("Doador excluído com sucesso!");
-          fetchDoadores(); // Atualiza a lista após excluir
+          fetchDoadores();
         })
         .catch((err) => {
           console.error(err);
           alert("Erro ao excluir doador.");
         });
     }
+  };
+
+  const handleEditar = (cpf) => {
+    navigate(`/doadores/editar/${cpf}`);
   };
 
   return (
@@ -72,11 +76,27 @@ function DoadorList() {
                 <td style={tdStyle}>{doador.pessoa.enderecoCidade}</td>
                 <td style={tdStyle}>{doador.pessoa.enderecoEstado}</td>
                 <td style={tdStyle}>
-                  <button 
+                  <button
+                    onClick={() => handleEditar(doador.pessoa.cpf)}
+                    style={editButtonStyle}
+                    onMouseOver={(e) =>
+                      (e.currentTarget.style.backgroundColor = "#1e8449")
+                    }
+                    onMouseOut={(e) =>
+                      (e.currentTarget.style.backgroundColor = "#27ae60")
+                    }
+                  >
+                    Editar
+                  </button>
+                  <button
                     onClick={() => handleExcluir(doador.pessoa.cpf)}
                     style={deleteButtonStyle}
-                    onMouseOver={e => e.currentTarget.style.backgroundColor = "#c0392b"}
-                    onMouseOut={e => e.currentTarget.style.backgroundColor = "#e74c3c"}
+                    onMouseOver={(e) =>
+                      (e.currentTarget.style.backgroundColor = "#c0392b")
+                    }
+                    onMouseOut={(e) =>
+                      (e.currentTarget.style.backgroundColor = "#e74c3c")
+                    }
                   >
                     Excluir
                   </button>
@@ -88,11 +108,15 @@ function DoadorList() {
       </div>
 
       <div style={buttonWrapper}>
-        <button 
-          onClick={handleVoltar} 
+        <button
+          onClick={handleVoltar}
           style={buttonStyle}
-          onMouseOver={e => e.currentTarget.style.backgroundColor = "#5a1313"}
-          onMouseOut={e => e.currentTarget.style.backgroundColor = "#7B1E1E"}
+          onMouseOver={(e) =>
+            (e.currentTarget.style.backgroundColor = "#5a1313")
+          }
+          onMouseOut={(e) =>
+            (e.currentTarget.style.backgroundColor = "#7B1E1E")
+          }
         >
           Voltar
         </button>
@@ -101,7 +125,7 @@ function DoadorList() {
   );
 }
 
-// 🎨 Estilos organizados:
+// 🎨 Estilos atualizados
 
 const pageStyle = {
   maxWidth: "1200px",
@@ -110,45 +134,26 @@ const pageStyle = {
   backgroundColor: "#fff",
   borderRadius: "12px",
   boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-  fontFamily: "'Segoe UI', sans-serif"
+  fontFamily: "'Segoe UI', sans-serif",
 };
-
-const headerStyle = {
-  textAlign: "center",
-  marginBottom: "30px"
-};
-
-const tableWrapper = {
-  overflowX: "auto"
-};
-
-const tableStyle = {
-  width: "100%",
-  borderCollapse: "collapse",
-  minWidth: "1000px"
-};
-
+const headerStyle = { textAlign: "center", marginBottom: "30px" };
+const tableWrapper = { overflowX: "auto" };
+const tableStyle = { width: "100%", borderCollapse: "collapse", minWidth: "1000px" };
 const thStyle = {
   border: "1px solid #ddd",
   padding: "12px",
   textAlign: "left",
   backgroundColor: "#7B1E1E",
   color: "white",
-  fontSize: "15px"
+  fontSize: "15px",
 };
-
 const tdStyle = {
   border: "1px solid #ddd",
   padding: "10px",
   fontSize: "14px",
-  color: "#333"
+  color: "#333",
 };
-
-const buttonWrapper = {
-  marginTop: "30px",
-  textAlign: "right"
-};
-
+const buttonWrapper = { marginTop: "30px", textAlign: "right" };
 const buttonStyle = {
   padding: "10px 24px",
   backgroundColor: "#7B1E1E",
@@ -158,9 +163,20 @@ const buttonStyle = {
   fontWeight: "bold",
   fontSize: "16px",
   cursor: "pointer",
-  transition: "background-color 0.3s ease"
+  transition: "background-color 0.3s ease",
 };
-
+const editButtonStyle = {
+  padding: "6px 12px",
+  backgroundColor: "#27ae60",
+  color: "#fff",
+  border: "none",
+  borderRadius: "6px",
+  fontSize: "14px",
+  fontWeight: "bold",
+  cursor: "pointer",
+  marginRight: "8px",
+  transition: "background-color 0.3s ease",
+};
 const deleteButtonStyle = {
   padding: "6px 12px",
   backgroundColor: "#e74c3c",
@@ -170,7 +186,7 @@ const deleteButtonStyle = {
   fontSize: "14px",
   fontWeight: "bold",
   cursor: "pointer",
-  transition: "background-color 0.3s ease"
+  transition: "background-color 0.3s ease",
 };
 
 export default DoadorList;

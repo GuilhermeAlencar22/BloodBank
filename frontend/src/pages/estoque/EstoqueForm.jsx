@@ -1,13 +1,37 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 function EstoqueForm() {
+  const { id } = useParams(); // usado para edição
+  const isEdit = Boolean(id);
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
+    idEstoque: "",
     tipoSanguineo: "",
     qtdBolsas: ""
   });
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    if (isEdit) {
+      fetch(`http://localhost:8080/estoque`)
+        .then(res => res.json())
+        .then(data => {
+          const item = data.find(e => e.idEstoque === parseInt(id));
+          if (!item) throw new Error("Estoque não encontrado");
+          setForm({
+            idEstoque: item.idEstoque,
+            tipoSanguineo: item.tipoSanguineo,
+            qtdBolsas: item.qtdBolsas.toString()
+          });
+        })
+        .catch(err => {
+          console.error(err);
+          alert("Erro ao carregar dados do estoque.");
+          navigate("/estoque");
+        });
+    }
+  }, [isEdit, id, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,24 +42,31 @@ function EstoqueForm() {
     e.preventDefault();
 
     const payload = {
+      idEstoque: isEdit ? parseInt(form.idEstoque, 10) : undefined,
       tipoSanguineo: form.tipoSanguineo,
       qtdBolsas: parseInt(form.qtdBolsas, 10)
     };
 
+    const url = isEdit
+      ? "http://localhost:8080/estoque"
+      : "http://localhost:8080/estoque";
+
+    const method = isEdit ? "PUT" : "POST";
+
     try {
-      const response = await fetch("http://localhost:8080/estoque", {
-        method: "POST",
+      const response = await fetch(url, {
+        method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       });
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.error || "Erro ao adicionar ao estoque");
+        throw new Error(data.error || "Erro ao salvar estoque");
       }
-      alert(data.message || "Estoque atualizado com sucesso!");
-      setForm({ tipoSanguineo: "", qtdBolsas: "" });
+      alert(data.message || "Estoque salvo com sucesso!");
+      navigate("/estoque")
     } catch (err) {
-      alert("Erro ao adicionar ao estoque: " + err.message);
+      alert("Erro ao salvar: " + err.message);
     }
   };
 
@@ -46,7 +77,7 @@ function EstoqueForm() {
   return (
     <div style={pageStyle}>
       <div style={headerStyle}>
-        <h2>📦 Atualizar Estoque de Bolsas</h2>
+        <h2>{isEdit ? "✏️ Editar Estoque" : "📦 Atualizar Estoque de Bolsas"}</h2>
       </div>
 
       <form onSubmit={handleSubmit} style={formStyle}>
@@ -59,6 +90,7 @@ function EstoqueForm() {
               value={form.tipoSanguineo}
               onChange={handleChange}
               required
+              disabled={isEdit}
               style={inputStyle}
             />
           </div>
@@ -78,7 +110,7 @@ function EstoqueForm() {
 
         <div style={buttonWrapper}>
           <button type="submit" style={submitButton}>
-            Salvar
+            {isEdit ? "Salvar Alterações" : "Salvar"}
           </button>
           <button
             type="button"
@@ -95,7 +127,7 @@ function EstoqueForm() {
   );
 }
 
-// 🎨 Estilos:
+// 🎨 Estilos: (iguais aos anteriores)
 
 const pageStyle = {
   maxWidth: "900px",
@@ -107,65 +139,24 @@ const pageStyle = {
   fontFamily: "'Segoe UI', sans-serif"
 };
 
-const headerStyle = {
-  textAlign: "center",
-  marginBottom: "30px"
-};
-
-const formStyle = {
-  padding: "20px"
-};
-
-const formRow = {
-  display: "flex",
-  gap: "20px",
-  marginBottom: "20px",
-  flexWrap: "wrap"
-};
-
-const formGroup = {
-  flex: "1",
-  display: "flex",
-  flexDirection: "column"
-};
-
+const headerStyle = { textAlign: "center", marginBottom: "30px" };
+const formStyle = { padding: "20px" };
+const formRow = { display: "flex", gap: "20px", marginBottom: "20px", flexWrap: "wrap" };
+const formGroup = { flex: "1", display: "flex", flexDirection: "column" };
 const inputStyle = {
-  padding: "10px",
-  border: "1px solid #ccc",
-  borderRadius: "6px",
-  fontSize: "15px",
-  marginTop: "6px"
+  padding: "10px", border: "1px solid #ccc", borderRadius: "6px",
+  fontSize: "15px", marginTop: "6px"
 };
-
-const buttonWrapper = {
-  display: "flex",
-  justifyContent: "flex-end",
-  gap: "10px",
-  marginTop: "30px"
-};
-
+const buttonWrapper = { display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "30px" };
 const submitButton = {
-  padding: "12px 30px",
-  backgroundColor: "#7B1E1E",
-  color: "white",
-  border: "none",
-  borderRadius: "8px",
-  fontWeight: "bold",
-  fontSize: "16px",
-  cursor: "pointer",
-  transition: "background-color 0.3s ease"
+  padding: "12px 30px", backgroundColor: "#7B1E1E", color: "white",
+  border: "none", borderRadius: "8px", fontWeight: "bold", fontSize: "16px",
+  cursor: "pointer", transition: "background-color 0.3s ease"
 };
-
 const backButton = {
-  padding: "12px 30px",
-  backgroundColor: "#34495e",
-  color: "white",
-  border: "none",
-  borderRadius: "8px",
-  fontWeight: "bold",
-  fontSize: "16px",
-  cursor: "pointer",
-  transition: "background-color 0.3s ease"
+  padding: "12px 30px", backgroundColor: "#34495e", color: "white",
+  border: "none", borderRadius: "8px", fontWeight: "bold", fontSize: "16px",
+  cursor: "pointer", transition: "background-color 0.3s ease"
 };
 
 export default EstoqueForm;

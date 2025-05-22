@@ -30,6 +30,10 @@ function SolicitacaoList() {
     }
   };
 
+  const handleEdit = (id) => {
+    navigate(`/solicitacoes/editar/${id}`);
+  };
+
   const handleVoltar = () => {
     navigate('/sistema');
   };
@@ -70,6 +74,14 @@ function SolicitacaoList() {
                 </td>
                 <td style={tdStyle}>
                   <button
+                    onClick={() => handleEdit(s.idSolicitacao)}
+                    style={editButtonStyle}
+                    onMouseOver={e => e.currentTarget.style.backgroundColor = "#1e8449"}
+                    onMouseOut={e => e.currentTarget.style.backgroundColor = "#27ae60"}
+                  >
+                    Editar
+                  </button>
+                  <button
                     onClick={() => handleDelete(s.idSolicitacao)}
                     style={deleteButtonStyle}
                     onMouseOver={e => e.currentTarget.style.backgroundColor = "#c0392b"}
@@ -98,7 +110,7 @@ function SolicitacaoList() {
   );
 }
 
-// 🎨 Estilos organizados:
+// 🎨 Estilos:
 
 const pageStyle = {
   maxWidth: "1100px",
@@ -139,6 +151,19 @@ const tdStyle = {
   padding: "10px",
   fontSize: "14px",
   color: "#333"
+};
+
+const editButtonStyle = {
+  backgroundColor: "#27ae60",
+  color: "white",
+  border: "none",
+  padding: "6px 12px",
+  borderRadius: "6px",
+  fontSize: "14px",
+  fontWeight: "bold",
+  cursor: "pointer",
+  marginRight: "6px",
+  transition: "background-color 0.3s ease"
 };
 
 const deleteButtonStyle = {

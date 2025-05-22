@@ -50,4 +50,57 @@ public class EstoqueServlet extends HttpServlet {
             resp.getWriter().write("{\"message\":\"Estoque criado com sucesso\"}");
         }
     }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp)
+        throws ServletException, IOException {
+    resp.setContentType("application/json");
+
+    Estoque atualizado = gson.fromJson(req.getReader(), Estoque.class);
+    if (atualizado.getIdEstoque() <= 0) {
+        resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        resp.getWriter().write("{\"error\":\"ID do estoque é obrigatório para atualização\"}");
+        return;
+    }
+
+    Estoque existente = estoqueDAO.buscarPorId(atualizado.getIdEstoque());
+    if (existente == null) {
+        resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        resp.getWriter().write("{\"error\":\"Estoque não encontrado\"}");
+        return;
+    }
+
+    estoqueDAO.atualizar(atualizado);
+    resp.getWriter().write("{\"message\":\"Estoque atualizado com sucesso\"}");
+}
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
+        throws ServletException, IOException {
+    resp.setContentType("application/json");
+
+    String idParam = req.getParameter("id");
+    if (idParam == null) {
+        resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        resp.getWriter().write("{\"error\":\"ID do estoque não informado\"}");
+        return;
+    }
+
+    try {
+        int id = Integer.parseInt(idParam);
+        Estoque existente = estoqueDAO.buscarPorId(id);
+        if (existente == null) {
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            resp.getWriter().write("{\"error\":\"Estoque não encontrado\"}");
+            return;
+        }
+
+        estoqueDAO.deletar(id);
+        resp.getWriter().write("{\"message\":\"Estoque deletado com sucesso\"}");
+    } catch (NumberFormatException e) {
+        resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        resp.getWriter().write("{\"error\":\"ID inválido\"}");
+    }
+}
+
+
 }

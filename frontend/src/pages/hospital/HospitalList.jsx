@@ -60,6 +60,14 @@ function HospitalList() {
                 <td style={tdStyle}>{h.endereco}</td>
                 <td style={tdStyle}>
                   <button
+                    onClick={() => navigate(`/hospitais/editar/${h.cnpj}`)}
+                    style={editButtonStyle}
+                    onMouseOver={e => e.currentTarget.style.backgroundColor = "#1e8449"}
+                    onMouseOut={e => e.currentTarget.style.backgroundColor = "#27ae60"}
+                  >
+                    Editar
+                  </button>
+                  <button
                     onClick={() => handleDelete(h.cnpj)}
                     style={deleteButtonStyle}
                     onMouseOver={e => e.currentTarget.style.backgroundColor = "#c0392b"}
@@ -129,6 +137,19 @@ const tdStyle = {
   padding: "10px",
   fontSize: "14px",
   color: "#333"
+};
+
+const editButtonStyle = {
+  backgroundColor: "#27ae60",
+  color: "white",
+  border: "none",
+  padding: "6px 12px",
+  borderRadius: "6px",
+  fontSize: "14px",
+  fontWeight: "bold",
+  cursor: "pointer",
+  marginRight: "6px",
+  transition: "background-color 0.3s ease"
 };
 
 const deleteButtonStyle = {

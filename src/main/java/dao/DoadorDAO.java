@@ -91,6 +91,22 @@ public class DoadorDAO {
         return lista;
     }
 
+    public void atualizar(Doador d) {
+    String sql = "UPDATE Doador SET qtd_bolsas_doadas=?, sexo=? WHERE cpf=?";
+    try (Connection conn = ConnectionFactory.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setInt(1, d.getQtdBolsasDoadas());
+        ps.setString(2, d.getSexo());
+        ps.setString(3, d.getCpf());
+
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        throw new RuntimeException("Erro ao atualizar doador: " + e.getMessage(), e);
+    }
+}
+
+
     public void deletar(String cpf) {
         String sql = "DELETE FROM Doador WHERE cpf=?";
         try (Connection conn = ConnectionFactory.getConnection();

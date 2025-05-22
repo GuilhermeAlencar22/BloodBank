@@ -3,19 +3,39 @@
   margin: 60px auto;
   padding: 40px;
   font-family: 'Segoe UI', sans-serif;
+  position: relative;
 }
 
 .sistema-header {
   text-align: center;
   font-size: 28px;
   color: #7B1E1E;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
 }
+
+.logout-button {
+  padding: 10px 26px;
+  border: 2px solid #7B1E1E;
+  border-radius: 6px;
+  background-color: transparent;
+  color: #7B1E1E;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.logout-button:hover {
+  background-color: #fbeeee;
+  transform: scale(1.05);
+}
+
 
 .sistema-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 30px;
+  margin-top: 30px;
 }
 
 .sistema-card {
@@ -86,7 +106,6 @@
   color: #7B1E1E;
 }
 
-/* Garante que os gráficos ocupem espaço */
 canvas {
   width: 100% !important;
   max-height: 320px;

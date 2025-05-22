@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function SolicitacaoForm() {
+  const { id } = useParams();
+  const isEdit = Boolean(id);
+  const navigate = useNavigate();
+
   const [idSolicitacao, setIdSolicitacao] = useState("");
   const [tipoSanguineo, setTipoSanguineo] = useState("");
   const [qtdBolsasSolicitadas, setQtdBolsasSolicitadas] = useState(1);
   const [idGerente, setIdGerente] = useState("");
   const [gerentes, setGerentes] = useState([]);
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(isEdit);
 
   useEffect(() => {
     fetch("http://localhost:8080/gerentes")
@@ -15,6 +19,27 @@ function SolicitacaoForm() {
       .then(data => setGerentes(data))
       .catch(err => console.error("Erro ao carregar gerentes", err));
   }, []);
+
+  useEffect(() => {
+    if (isEdit) {
+      fetch(`http://localhost:8080/solicitacoes/${id}`)
+        .then(res => {
+          if (!res.ok) throw new Error("Erro ao buscar solicitação");
+          return res.json();
+        })
+        .then(data => {
+          setIdSolicitacao(data.idSolicitacao);
+          setTipoSanguineo(data.tipoSanguineo);
+          setQtdBolsasSolicitadas(data.qtdBolsasSolicitadas);
+          setIdGerente(data.idGerente);
+        })
+        .catch(err => {
+          console.error(err);
+          alert("Erro ao carregar solicitação.");
+        })
+        .finally(() => setLoading(false));
+    }
+  }, [isEdit, id]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -26,18 +51,24 @@ function SolicitacaoForm() {
       idGerente,
     };
 
-    fetch("http://localhost:8080/solicitacoes", {
-      method: "POST",
+    const url = isEdit
+      ? `http://localhost:8080/solicitacoes/${idSolicitacao}`
+      : "http://localhost:8080/solicitacoes";
+
+    const method = isEdit ? "PUT" : "POST";
+
+    fetch(url, {
+      method,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(solicitacao),
     })
       .then(res => {
-        if (!res.ok) throw new Error("Erro ao criar solicitação");
-        alert("Solicitação registrada com sucesso!");
-        setIdSolicitacao("");
-        setTipoSanguineo("");
-        setQtdBolsasSolicitadas(1);
-        setIdGerente("");
+        if (!res.ok) throw new Error("Erro ao salvar solicitação");
+        return res.json();
+      })
+      .then(data => {
+        alert(data.message || "Solicitação salva com sucesso!");
+        navigate("/solicitacoes");
       })
       .catch(err => alert(err.message));
   };
@@ -46,10 +77,12 @@ function SolicitacaoForm() {
     navigate('/sistema');
   };
 
+  if (loading) return <div style={{ padding: 20 }}>Carregando solicitação...</div>;
+
   return (
     <div style={pageStyle}>
       <div style={headerStyle}>
-        <h2>📑 Nova Solicitação de Bolsas</h2>
+        <h2>{isEdit ? "✏️ Editar Solicitação" : "📑 Nova Solicitação de Bolsas"}</h2>
       </div>
 
       <form onSubmit={handleSubmit} style={formStyle}>
@@ -60,6 +93,7 @@ function SolicitacaoForm() {
               value={idSolicitacao}
               onChange={(e) => setIdSolicitacao(e.target.value)}
               required
+              disabled={isEdit}
               style={inputStyle}
             />
           </div>
@@ -108,7 +142,7 @@ function SolicitacaoForm() {
 
         <div style={buttonWrapper}>
           <button type="submit" style={submitButton}>
-            Registrar
+            {isEdit ? "Salvar Alterações" : "Registrar"}
           </button>
           <button
             type="button"
@@ -142,9 +176,7 @@ const headerStyle = {
   marginBottom: "30px"
 };
 
-const formStyle = {
-  padding: "20px"
-};
+const formStyle = { padding: "20px" };
 
 const formRow = {
   display: "flex",

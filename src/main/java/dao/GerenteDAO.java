@@ -43,6 +43,20 @@ public class GerenteDAO {
         return lista;
     }
 
+    public void atualizar(Gerente g) {
+    String sql = "UPDATE Gerente SET cnpj_hospital=? WHERE id_funcionario=?";
+    try (Connection conn = ConnectionFactory.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setString(1, g.getCnpjHospital());
+        ps.setString(2, g.getIdFuncionario());
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        throw new RuntimeException("Erro ao atualizar gerente: " + e.getMessage(), e);
+    }
+}
+
+
     public Gerente buscarPorId(String id) {
         String sql = "SELECT * FROM Gerente WHERE id_funcionario=?";
         try (Connection conn = ConnectionFactory.getConnection();

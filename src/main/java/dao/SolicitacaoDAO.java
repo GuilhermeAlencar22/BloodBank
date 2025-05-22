@@ -72,6 +72,23 @@ public class SolicitacaoDAO {
         return lista;
     }
 
+public void atualizar(Solicitacao s) {
+    String sql = "UPDATE Solicitacao SET qtd_bolsas_solicitadas=?, tipo_sanguineo=?, id_gerente=? WHERE id_solicitacao=?";
+    try (Connection conn = ConnectionFactory.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setInt(1, s.getQtdBolsasSolicitadas());
+        ps.setString(2, s.getTipoSanguineo());
+        ps.setString(3, s.getIdGerente());
+        ps.setString(4, s.getIdSolicitacao());
+
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        throw new RuntimeException("Erro ao atualizar solicitação: " + e.getMessage(), e);
+    }
+}
+
+
     public void deletar(String idSolicitacao) {
         String sql = "DELETE FROM Solicitacao WHERE id_solicitacao=?";
         try (Connection conn = ConnectionFactory.getConnection();
