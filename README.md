@@ -91,12 +91,14 @@ Ideal para instituições de saúde que necessitam **rastreabilidade total** do 
 ## 🛠️ Tecnologias Utilizadas
 
 - **Java 17**
+- **Java Script**
 - **Servlets + API REST**
 - **MySQL 8.x**
 - **Jetty 9.4.x (Servidor HTTP)**
 - **Maven 3.x**
 - **React.js (Front-end)**
 - **Gson (JSON Serializer/Deserializer)**
+- **CSS / HTML**
 
 ---
 ## 🚀 Instruções de Execução
