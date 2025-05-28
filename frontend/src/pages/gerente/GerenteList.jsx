@@ -96,7 +96,6 @@ function GerenteList() {
   );
 }
 
-// 🎨 Estilos:
 
 const pageStyle = {
   maxWidth: "1000px",

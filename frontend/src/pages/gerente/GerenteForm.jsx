@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 function GerenteForm() {
-  const { id } = useParams(); // usado para edição
+  const { id } = useParams(); 
   const isEdit = Boolean(id);
   const navigate = useNavigate();
 
@@ -71,7 +71,6 @@ function GerenteForm() {
     if (isEdit) {
       salvarGerente();
     } else {
-      // Criação: primeiro cria funcionário
       const funcionario = { idFuncionario, nome };
       fetch("http://localhost:8080/funcionarios", {
         method: "POST",

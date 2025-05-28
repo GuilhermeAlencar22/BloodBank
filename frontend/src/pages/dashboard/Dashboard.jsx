@@ -272,9 +272,6 @@ export default function Dashboard() {
         </div>
         <div className="chart-card"><h3>Doadores por Região</h3><canvas id="regionChart"></canvas></div>
       </div>
-      <div className="dashboard-cta">
-        <button onClick={() => navigate('/cadastro')}>Quero me tornar um doador</button>
-      </div>
     </div>
   );
 }

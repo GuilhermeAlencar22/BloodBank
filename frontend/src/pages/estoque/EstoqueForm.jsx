@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 function EstoqueForm() {
-  const { id } = useParams(); // usado para edição
+  const { id } = useParams(); 
   const isEdit = Boolean(id);
   const navigate = useNavigate();
 
@@ -127,7 +127,6 @@ function EstoqueForm() {
   );
 }
 
-// 🎨 Estilos: (iguais aos anteriores)
 
 const pageStyle = {
   maxWidth: "900px",

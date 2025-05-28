@@ -1,4 +1,3 @@
-// src/pages/sistema/Sistema.jsx
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Chart from "chart.js/auto";

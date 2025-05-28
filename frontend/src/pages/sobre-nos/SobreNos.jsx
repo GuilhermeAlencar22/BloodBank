@@ -34,14 +34,13 @@ function SobreNos() {
       </ul>
 
       <h2>Por que escolher o Blood Bank?</h2>
-      <p>
-        • Interface moderna e intuitiva<br />
-        • Painel de controle para gestores<br />
-        • Integração com hospitais e sistemas de saúde<br />
-        • Visualização gráfica do estoque por tipo sanguíneo<br />
-        • Relatórios automatizados e suporte contínuo
-      </p>
-
+      <ul>
+        <li>Interface moderna e intuitiva</li>
+        <li>Painel de controle para gestores</li>
+        <li>Integração com hospitais e sistemas de saúde</li>
+        <li>Visualização gráfica do estoque por tipo sanguíneo</li>
+        <li>Relatórios automatizados e suporte contínuo</li>
+      </ul>
       <h2>Compromisso com a Saúde Pública</h2>
       <p>
         Mais que um sistema, somos um aliado da vida. Atuamos lado a lado com profissionais da saúde para garantir que o sangue chegue a quem precisa com rapidez, rastreabilidade e controle.

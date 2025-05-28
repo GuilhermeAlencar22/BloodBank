@@ -110,8 +110,6 @@ function SolicitacaoList() {
   );
 }
 
-// 🎨 Estilos:
-
 const pageStyle = {
   maxWidth: "1100px",
   margin: "40px auto",

@@ -158,9 +158,6 @@ function SolicitacaoForm() {
     </div>
   );
 }
-
-// 🎨 Estilos:
-
 const pageStyle = {
   maxWidth: "900px",
   margin: "40px auto",

@@ -10,7 +10,7 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if ((username.toLowerCase() === "guilherme") && password === "09891333469") {
-      sessionStorage.setItem('auth', 'true'); // trocado para sessionStorage
+      sessionStorage.setItem('auth', 'true'); 
       navigate("/sistema");
     } else {
       alert("Usuário ou senha incorretos.");

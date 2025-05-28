@@ -1,97 +1,118 @@
 .register-section {
-  max-width: 900px;
-  margin: 60px auto;
-  padding: 40px;
-  background-color: #ffffff;
+  max-width: 960px;
+  margin: 50px auto;
+  background-color: #fff;
   border-radius: 12px;
-  box-shadow: 0 0 16px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
   font-family: 'Segoe UI', sans-serif;
+  border: 3px solid #7B1E1E;
 }
 
 .register-header {
   background: linear-gradient(135deg, #7B1E1E, #5c1010);
-  padding: 30px;
-  border-radius: 10px 10px 0 0;
   color: #fff;
+  padding: 35px 20px;
   text-align: center;
 }
 
 .register-header h2 {
+  font-size: 30px;
   margin: 0;
-  font-size: 28px;
 }
 
 .register-form {
-  padding: 30px;
+  padding: 40px 30px;
 }
 
 .form-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
-  margin-bottom: 25px;
+  gap: 24px;
+  margin-bottom: 30px;
 }
 
 .form-group {
-  flex: 1 1 250px;
+  flex: 1 1 280px;
   display: flex;
   flex-direction: column;
 }
 
 .form-group label {
+  margin-bottom: 8px;
   font-weight: 600;
-  margin-bottom: 6px;
   color: #333;
 }
 
 .form-group input {
-  padding: 10px 12px;
-  font-size: 15px;
+  padding: 10px 14px;
   border: 1px solid #ccc;
   border-radius: 6px;
-  transition: border-color 0.3s ease;
+  font-size: 16px;
+  transition: all 0.3s ease;
 }
 
 .form-group input:focus {
   border-color: #7B1E1E;
+  box-shadow: 0 0 0 3px rgba(123, 30, 30, 0.2);
   outline: none;
 }
 
 .form-footer {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 10px;
+  flex-wrap: wrap;
 }
 
-.submit-button {
-  padding: 12px 32px;
-  background-color: #7B1E1E;
-  color: #fff;
-  font-weight: bold;
+.submit-button,
+.back-button {
+  padding: 12px 36px;
   font-size: 16px;
+  font-weight: bold;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+/* Botão cadastrar */
+.submit-button {
+  background-color: #7B1E1E;
+  color: #fff;
 }
 
 .submit-button:hover {
   background-color: #5c1010;
+  transform: translateY(-2px);
 }
 
-/* Botão de Voltar */
+/* Botão voltar */
 .back-button {
   background-color: #2980b9;
   color: #fff;
-  font-weight: bold;
-  padding: 12px 30px;
-  font-size: 16px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
 .back-button:hover {
   background-color: #21618c;
+  transform: translateY(-2px);
 }
 
+/* Responsivo */
+@media (max-width: 768px) {
+  .form-group {
+    flex: 1 1 100%;
+  }
+
+  .submit-button,
+  .back-button {
+    width: 100%;
+    text-align: center;
+  }
+
+  .form-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

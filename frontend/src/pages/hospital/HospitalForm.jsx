@@ -136,7 +136,6 @@ function HospitalForm() {
   );
 }
 
-// Estilos visuais
 
 const pageStyle = {
   maxWidth: "900px",

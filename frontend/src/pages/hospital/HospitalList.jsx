@@ -24,7 +24,7 @@ function HospitalList() {
         .then((res) => {
           if (!res.ok) throw new Error("Erro ao excluir");
           alert("Hospital excluído com sucesso!");
-          fetchHospitais(); // Atualiza lista após excluir
+          fetchHospitais(); 
         })
         .catch((err) => alert(err.message));
     }
@@ -95,9 +95,6 @@ function HospitalList() {
     </div>
   );
 }
-
-// 🎨 Estilos:
-
 const pageStyle = {
   maxWidth: "1200px",
   margin: "40px auto",

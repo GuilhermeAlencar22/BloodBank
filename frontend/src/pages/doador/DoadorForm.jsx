@@ -85,13 +85,33 @@ export default function DoadorForm() {
       .then(async res => {
         const data = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(data.error || "Erro ao salvar");
+
         alert(
           data.message ||
             (isEdit
               ? "Doador atualizado com sucesso!"
               : "Doador cadastrado com sucesso!")
         );
-        navigate("/doadores");
+
+        if (!isEdit) {
+          setForm({
+            cpf: "",
+            nome: "",
+            idade: "",
+            sexo: "",
+            tipoSanguineo: "",
+            enderecoRua: "",
+            enderecoCep: "",
+            enderecoCidade: "",
+            enderecoEstado: "",
+          });
+        }
+
+        if (from === "menu") {
+          navigate(location.pathname, { state: { from } }); // permanece na tela
+        } else {
+          navigate("/doadores"); // volta para listagem
+        }
       })
       .catch(err => {
         console.error("[DoadorForm] Erro ao salvar:", err);
@@ -104,6 +124,8 @@ export default function DoadorForm() {
       navigate("/");
     } else if (from === "sistema") {
       navigate("/sistema");
+    } else if (from === "menu") {
+      navigate("/"); // ou outro destino que desejar
     } else {
       navigate("/doadores");
     }
@@ -210,7 +232,6 @@ export default function DoadorForm() {
             {isEdit ? "Salvar Alterações" : "Cadastrar"}
           </button>
 
-          {/* Só mostra o botão de voltar se souber de onde veio */}
           {(from === "home" || from === "sistema") && (
             <button
               type="button"
