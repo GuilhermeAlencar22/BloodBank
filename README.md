@@ -4,54 +4,54 @@
 
 ## 🎯 Sobre o Sistema
 
-O **BloodBank** é uma plataforma completa de gerenciamento de bancos de sangue, desenvolvida para controlar de maneira **eficiente, segura e organizada** todo o fluxo de doações, armazenamento e solicitações hospitalares de bolsas de sangue.
+O **BloodBank** é uma plataforma completa para gerenciamento de bancos de sangue, desenvolvida para controlar de forma **eficiente, segura e organizada** todas as etapas do processo: doação, armazenamento e atendimento às solicitações hospitalares.
 
-Ideal para instituições de saúde que necessitam **rastreabilidade total** do sangue doado, controle rigoroso do estoque e agilidade nas operações de doação e distribuição.
+Ideal para instituições de saúde que buscam **rastreabilidade total** das bolsas doadas, **controle de estoque em tempo real** e **agilidade na gestão**.
 
 ---
 
 ## 📌 Funcionalidades Principais
 
-- **Cadastrar doadores** com informações pessoais e de saúde.
+- **Cadastrar doadores** com dados pessoais e clínicos.
 - **Registrar doações de sangue** vinculadas a cada doador.
-- **Gerenciar o estoque** de sangue por tipo sanguíneo e quantidade de bolsas.
-- **Atender solicitações** de sangue feitas por hospitais.
-- **Cadastrar pacientes** que irão receber as bolsas de sangue.
+- **Gerenciar o estoque** de sangue por tipo sanguíneo.
+- **Atender solicitações** feitas por hospitais parceiros.
+- **Cadastrar pacientes** receptores de bolsas.
 - **Gerenciar funcionários**, diferenciando administradores e atendentes.
-- **Acompanhar hospitais parceiros** e os pacientes vinculados.
+- **Acompanhar hospitais** e os pacientes atendidos.
 
 ---
 
 ## 🧩 Entidades e Relacionamentos
 
 ### 🧍‍♂️ Doador
-- Pessoa cadastrada no sistema, associada a um ou mais registros de doação.
-- Controla também a quantidade total de bolsas de sangue doadas.
+- Pessoa cadastrada no sistema.
+- Associado a doações e ao histórico de bolsas geradas.
 
 ### 🧑‍⚕️ Funcionário
-- Responsáveis pela operação do sistema, podendo ser:
-  - **Administrador**: gerencia o sistema inteiro.
-  - **Atendente**: registra doações e solicitações.
+- Usuário responsável por operar o sistema.
+  - **Administrador**: acesso completo.
+  - **Atendente**: realiza registros e solicitações.
 
 ### 🩸 Bolsa de Sangue
-- Cada doação gera uma **bolsa de sangue** com identificação única.
-- Vinculada ao **CPF do doador** e ao **tipo sanguíneo**.
+- Criada a cada doação.
+- Vinculada ao CPF do doador e ao tipo sanguíneo.
 
 ### 🏥 Hospital
-- Instituições cadastradas para receber bolsas de sangue.
-- Associadas a seus respectivos **pacientes**.
+- Instituição cadastrada para receber sangue.
+- Associada a pacientes e solicitações.
 
 ### 👩‍⚕️ Paciente
-- Pessoa que recebe a transfusão de sangue.
-- Associado a um hospital e a uma bolsa de sangue recebida.
+- Receptor de uma bolsa de sangue.
+- Vinculado a um hospital e a uma bolsa utilizada.
 
 ### 📦 Estoque
-- Armazena a quantidade disponível de bolsas, organizadas por tipo sanguíneo.
-- Atualizado automaticamente a cada nova doação ou retirada.
+- Quantidade disponível de bolsas por tipo sanguíneo.
+- Atualizado automaticamente.
 
 ### 📜 Solicitação
-- Pedido de bolsas de sangue feito por hospitais.
-- Formalizado por um **atendente** no sistema, com quantidade e tipos solicitados.
+- Pedido de bolsas por parte do hospital.
+- Registrado por um atendente.
 
 ---
 
@@ -60,43 +60,66 @@ Ideal para instituições de saúde que necessitam **rastreabilidade total** do 
 1. **Cadastro de Doador**  
    ➔ Funcionário registra um novo doador.
 
-2. **Realização de Doação**  
-   ➔ Cada doação gera bolsas de sangue vinculadas ao CPF do doador.
+2. **Registro de Doação**  
+   ➔ Cada doação gera uma ou mais bolsas vinculadas ao doador.
 
 3. **Atualização do Estoque**  
-   ➔ As bolsas doadas aumentam automaticamente o estoque.
+   ➔ Bolsas doadas são adicionadas ao estoque automaticamente.
 
 4. **Solicitação de Bolsas**  
-   ➔ Hospital solicita bolsas específicas (tipo sanguíneo e quantidade).
+   ➔ Hospital solicita bolsas de sangue via sistema.
 
 5. **Distribuição ao Paciente**  
-   ➔ A bolsa solicitada é associada a um paciente e o estoque é atualizado.
+   ➔ Bolsa é associada a um paciente e o estoque é reduzido.
 
-6. **Controle de Funcionários**  
-   ➔ Administradores gerenciam todo o sistema; atendentes realizam cadastros e solicitações.
+6. **Gestão de Funcionários**  
+   ➔ Administradores gerenciam o sistema, atendentes executam ações operacionais.
 
 ---
 
 ## 🛡️ Benefícios do Sistema
 
-- **Controle total da origem e destino** de cada bolsa de sangue.
-- **Eficiência no atendimento** de solicitações hospitalares.
-- **Otimização da gestão de estoque**, reduzindo desperdício de sangue.
-- **Acompanhamento da performance dos doadores** (quantidade de bolsas doadas).
-- **Segurança e rastreabilidade** para todas as etapas da doação e distribuição.
-- **Atendimento humanizado e organizado** para pacientes.
+- **Rastreabilidade completa** do ciclo da bolsa de sangue.
+- **Eficiência no atendimento hospitalar**.
+- **Gestão automatizada de estoque**, evitando perdas.
+- **Monitoramento da frequência de doações**.
+- **Segurança e confiabilidade** em todas as etapas.
+- **Organização e agilidade** no atendimento a pacientes.
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **Java 17**
+- **Java**
+- **JavaScript**
 - **Servlets + API REST**
-- **MySQL 8.x**
-- **Jetty 9.4.x (Servidor HTTP)**
+- **SQL puro**
+- **CSS**
 - **Maven 3.x**
 - **React.js (Front-end)**
 - **Gson (JSON Serializer/Deserializer)**
+
+---
+
+## 📦 Instruções de Execução
+
+```bash
+# Clone o repositório
+git clone https://github.com/seu-usuario/BloodBank.git
+cd BloodBank
+
+# Compile e execute o servidor
+mvn clean package
+mvn jetty:run
+
+# Abra outro terminal
+cd frontend
+npm install
+npm start
+
+A interface web estará disponível em:
+http://localhost:3000
+```
 
 ---
 
